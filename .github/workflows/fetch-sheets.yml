@@ -2,7 +2,7 @@ name: Fetch Google Sheets Data
 
 on:
   schedule:
-    - cron: '*/30 * * * *'  # Run every 30 minutes
+    - cron: '0 0 * * *' 
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
