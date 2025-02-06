@@ -5,7 +5,7 @@ import subprocess
 import os
 
 # CSV download URL
-CSV_URL = 'https://docs.google.com/spreadsheets/d/1P48quxwMv9XsYQhXjLOvTRRq8tt3ahJnkbXo4VCxjLc/export?format=csv'
+CSV_URL = 'https://github.com/mbnspocb/611Study-DataCleaner/releases/download/daily-latest/valid.csv'
 
 def fetch_and_convert():
     # Download CSV file using wget
@@ -312,7 +312,7 @@ def fetch_and_convert():
     <body>
         <div class="container">
             <div class="last-updated">最后更新时间：{current_time} (UTC+8)</div>
-            <div class="timezone-notice">注意！本站时间与原表格一致，<u>仅最后更新时间</u>为北京时间。</div>
+            <div class="timezone-notice">注意！本站时间与原表格一致，<u>仅最后更新时间</u>为北京时间。<br />此页面清洗掉了部分明显异常和不完整的数据</div>
             
             <div class="stats-container" id="totalStatsContainer">
                 <!-- 总体统计数据将在这里显示 -->
@@ -617,8 +617,4 @@ def fetch_and_convert():
     with open('index.html', 'w', encoding='utf-8') as f:
         f.write(html_content)
 
-if __name__ == '__main__':
-    fetch_and_convert()
-    # Clean up CSV file after conversion
-    if os.path.exists('data.csv'):
-        os.remove('data.csv') 
+fetch_and_convert()
