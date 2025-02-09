@@ -1,4 +1,4 @@
-name: Fetch Google Sheets Data
+name: Fetch Cleaned Data
 
 on:
   schedule:
