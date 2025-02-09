@@ -600,21 +600,8 @@
           });
         }
 
-        function sortTable(columnIndex, header) {
-          const tbody = table.querySelector("tbody");
-          const rows = Array.from(tbody.querySelectorAll("tr"));
-          const isAsc = !header.classList.contains("asc");
-
-          // 清除所有排序标记
-          table.querySelectorAll(".sortable").forEach((h) => {
-            h.classList.remove("asc", "desc");
-          });
-
-          // 添加新的排序标记
-          header.classList.add(isAsc ? "asc" : "desc");
-
-          // 自定义年级排序规则
-          const gradeMap = {
+        function sortGrades(grades) {
+          const gradeOrder = {
             小一: 1,
             小二: 2,
             小三: 3,
@@ -629,30 +616,44 @@
             高三: 12,
           };
 
-          const sortedRows = rows.sort((a, b) => {
-            let aValue = a.cells[columnIndex].textContent.trim();
-            let bValue = b.cells[columnIndex].textContent.trim();
-
-            // 判断是否是年级列
-            if (["年级"].includes(headers[columnIndex].textContent)) {
-              aValue = gradeMap[aValue] || 99; // 99 作为未知数据的默认值
-              bValue = gradeMap[bValue] || 99;
-            } else {
-              aValue = parseFloat(aValue) || 0;
-              bValue = parseFloat(bValue) || 0;
-            }
-
-            return isAsc ? aValue - bValue : bValue - aValue;
-          });
-
-          // 重新插入排序后的行
-          tbody.innerHTML = "";
-          sortedRows.forEach((row) => tbody.appendChild(row));
-
-          // 更新统计数据
-          updateFilteredStats();
+          return grades.sort(
+            (a, b) => (gradeOrder[a] || 999) - (gradeOrder[b] || 999)
+          );
         }
 
+        // 应用到年级筛选项
+        headers.forEach((header, index) => {
+          if (header.textContent === "年级") {
+            let values = new Set();
+            Array.from(
+              table.querySelectorAll(`td:nth-child(${index + 1})`)
+            ).forEach((cell) => values.add(cell.textContent.trim()));
+
+            // 使用新的排序函数
+            originalOptions[header.textContent] = sortGrades(
+              Array.from(values)
+            );
+
+            const filterGroup = document.createElement("div");
+            filterGroup.className = "filter-group";
+
+            const select = document.createElement("select");
+            select.className = "filter-select";
+            select.innerHTML = `
+            <option value="">筛选${header.textContent}</option>
+            ${originalOptions[header.textContent]
+              .map((value) => `<option value="${value}">${value}</option>`)
+              .join("")}
+        `;
+
+            select.addEventListener("change", () => {
+              applyFiltersAndSearch();
+            });
+
+            filterGroup.appendChild(select);
+            filterContainer.appendChild(filterGroup);
+          }
+        });
         // 初始化
         initTotalStats();
         addExpandButtons();
