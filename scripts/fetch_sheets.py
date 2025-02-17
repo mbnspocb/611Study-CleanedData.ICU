@@ -62,6 +62,10 @@ with open("index.html", "w", encoding="utf-8") as f:
                 ],
                 classes="table",
                 escape=False,
-            ),
+                na_rep="不适用",
+                float_format=lambda x: f"{int(x)}"
+                if isinstance(x, float) and x.is_integer()
+                else f"{x}",
+            ).replace("<td>不适用</td>", '<td class="empty">不适用</td>'),
         ).replace("{current_time}", current_time),
     )
