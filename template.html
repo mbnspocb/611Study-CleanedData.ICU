@@ -295,10 +295,26 @@
         content: "↓";
         opacity: 1;
       }
-      /* 学生评论列样式 */
       td[data-label="学生的评论"] {
         min-width: 200px;
-        max-width: 400px;
+        max-width: 700px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .expanded td[data-label="学生的评论"] {
+        -webkit-line-clamp: unset;
+        overflow: hidden;
+        text-overflow: unset;
+        display: table-cell;
+      }
+
+      td[data-label="上学时间"],
+      td[data-label*="放学时间"] {
+        white-space: nowrap;
       }
     </style>
   </head>
