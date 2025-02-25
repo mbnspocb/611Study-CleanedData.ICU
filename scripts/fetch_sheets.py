@@ -3,13 +3,15 @@ from datetime import datetime
 import pytz
 import subprocess
 
+china_tz = pytz.timezone("Asia/Shanghai")
+now = datetime.now(china_tz)
+date_time= now.strftime('%Y-%m-%d')
 # CSV download URL
-CSV_URL = "https://github.com/mbnspocb/611Study-DataCleaner/releases/download/daily-latest/valid.csv"
-
-
+CSV_URL = f"https://github.com/mbnspocb/611Study-DataCleaner/releases/download/{date_time}/valid.csv"
+# Get current time in UTC+8
+current_time=now.strftime("%Y-%m-%d %H:%M:%S")
 # Download CSV file using wget
 subprocess.run(["wget", "-q", CSV_URL, "-O", "data.csv"], check=True)
-
 # Read CSV file
 df = pd.read_csv("data.csv")
 num_to_chinese = {
@@ -31,9 +33,7 @@ grade_map = {
 # 替换年级字段
 df["年级"] = df["年级"].replace(grade_map)
 
-# Get current time in UTC+8
-china_tz = pytz.timezone("Asia/Shanghai")
-current_time = datetime.now(china_tz).strftime("%Y-%m-%d %H:%M:%S")
+
 
 with open("template.html", "r", encoding="utf-8") as f:
     html_content = f.read()
